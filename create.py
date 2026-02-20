@@ -7,33 +7,30 @@ from typing import Annotated, Literal
 app=FastAPI()
 
 class Patient(BaseModel):
-    id:Annotated[str,Field(...,description ="id of patient",example=["P001"])]
-    name : Annotated[str,Field(...,description="name of patient")]
-    city:Annotated[str,Field(...,description="city of patient")]
-    age:Annotated[int,Field(...,gt=0,lt=120,description="age of patient")]
-    gender:Annotated[Literal["Male","Female","Other"],Field(...,description="gender of patient")]
-    height:Annotated[float,Field(...,gt=0,description="height of patient")]
-    weight:Annotated[float,Field(...,gt=0,description="weight of patient")]
+    id: Annotated[str, Field(..., description="id of patient", example="P001")]
+    name: Annotated[str, Field(..., description="name of patient")]
+    city: Annotated[str, Field(..., description="city of patient")]
+    age: Annotated[int, Field(..., gt=0, lt=120)]
+    gender: Annotated[Literal["Male","Female","Other"], Field(...)]
+    height: Annotated[float, Field(..., gt=0)]
+    weight: Annotated[float, Field(..., gt=0)]
 
     @computed_field
     @property
     def bmi(self) -> float:
-        bmi=round(self.weight/(self.height**2),2)
-        return bmi
-    
+        return round(self.weight / ((self.height / 100) ** 2), 2)
+
     @computed_field
     @property
     def verdict(self) -> str:
-        if self.bmi<18.5:
+        if self.bmi < 18.5:
             return "Underweight"
-        elif self.bmi>=18.5 and self.bmi<25:
+        elif self.bmi < 25:
             return "Normal weight"
-        elif self.bmi>=25 and self.bmi<30:
+        elif self.bmi < 30:
             return "Overweight"
         else:
             return "Obese"
-
-
 
 
 
