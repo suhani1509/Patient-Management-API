@@ -44,7 +44,7 @@ def load_data():
     return data
 
 def save_data(data):
-    with open("patient.json","w") as f:
+    with open("patients.json","w") as f:
         json.dump(data,f)
 
 @app.get("/")
